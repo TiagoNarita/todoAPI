@@ -57,11 +57,14 @@ public class TaskService {
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(() -> new EntityNotFoundException("Task not found with ID: " + taskId));
 
-        taskMapper.updateTaskFromDto(dto, task);
+        if(dto.title() != null && !dto.title().isEmpty()){
+            task.setTitle(dto.title());
+        }
+        if(dto.description() != null && !dto.description().isEmpty()){
+            task.setTitle(dto.description());
+        }
 
-        Task updatedTask = taskRepository.save(task);
-
-        return taskMapper.toOut(updatedTask);
+        return taskMapper.toOut(taskRepository.save(task));
     }
 
     public void deleteTask(String taskId) {
